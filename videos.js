@@ -1337,8 +1337,12 @@ var professorMesserVideos = [
 ];
 
 function getProfessorMesserVideoByLesson(lessonNumber) {
+  const normalizedLessonNumber = Number(lessonNumber);
   return professorMesserVideos.find(function(video) {
-    return video.lessonNumber === Number(lessonNumber);
+    if (normalizedLessonNumber === 0) {
+      return video.lessonNumber === null;
+    }
+    return video.lessonNumber === normalizedLessonNumber;
   }) || null;
 }
 
