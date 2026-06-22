@@ -43,7 +43,8 @@
                 <button
                     type="button"
                     class="video-load"
-                    lessonnumber="0"
+                    data-index="0"
+                    data-video-id="KiEptGbnEBc"
                     data-title="How to Pass Your SY0-701 Security+ Exam in 2026">
                     Play intro
                 </button>
@@ -172,8 +173,19 @@
   <script>
     function loadLessonVideo(button) {
       const card = button.closest('.video-card');
-      const lessonNumber = Number(button.dataset.index);
-      const video = typeof getProfessorMesserVideoByLesson === 'function' ? getProfessorMesserVideoByLesson(lessonNumber) : null;
+      const staticVideoId = button.dataset.videoId;
+      let video = null;
+      let lessonNumber = button.dataset.index;
+      if (staticVideoId) {
+        video = {
+          videoId: staticVideoId,
+          title: button.dataset.title || 'Professor Messer SY0-701',
+          embedUrl: 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(staticVideoId) + '?rel=0'
+        };
+      } else {
+        lessonNumber = Number(lessonNumber);
+        video = typeof getProfessorMesserVideoByLesson === 'function' ? getProfessorMesserVideoByLesson(lessonNumber) : null;
+      }
       if (!video || !video.videoId) {
         const missing = document.createElement('div');
         missing.className = 'video-missing';
@@ -191,6 +203,11 @@
       card.replaceWith(frame);
     }
     document.querySelectorAll('.video-load').forEach(function (button) {
+      if (button.dataset.videoId) {
+        button.addEventListener('click', function () { loadLessonVideo(button); });
+        return;
+      }
+
       const lessonNumber = Number(button.dataset.index);
       const video = typeof getProfessorMesserVideoByLesson === 'function' ? getProfessorMesserVideoByLesson(lessonNumber) : null;
       if (video && video.videoId) {
