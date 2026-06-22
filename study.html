@@ -168,7 +168,41 @@
         YouTube playlist. Written lessons and practice questions are
         independent study material.
     </footer>
-
+<script src="videos.js"></script>
+  <script>
+    function loadLessonVideo(button) {
+      const card = button.closest('.video-card');
+      const lessonNumber = Number(button.dataset.index);
+      const video = typeof getProfessorMesserVideoByLesson === 'function' ? getProfessorMesserVideoByLesson(lessonNumber) : null;
+      if (!video || !video.videoId) {
+        const missing = document.createElement('div');
+        missing.className = 'video-missing';
+        missing.innerHTML = '<strong>Video link not added yet.</strong><p>This lesson is already mapped in <code>videos.js</code>. Fill in <code>videoId</code>, <code>watchUrl</code>, and <code>embedUrl</code> for lesson ' + lessonNumber + '.</p>';
+        card.replaceWith(missing);
+        return;
+      }
+      const frame = document.createElement('iframe');
+      frame.className = 'lesson-frame';
+      frame.src = video.embedUrl || ('https://www.youtube-nocookie.com/embed/' + encodeURIComponent(video.videoId) + '?rel=0');
+      frame.title = video.title + ' - Professor Messer SY0-701';
+      frame.loading = 'lazy';
+      frame.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+      frame.allowFullscreen = true;
+      card.replaceWith(frame);
+    }
+    document.querySelectorAll('.video-load').forEach(function (button) {
+      const lessonNumber = Number(button.dataset.index);
+      const video = typeof getProfessorMesserVideoByLesson === 'function' ? getProfessorMesserVideoByLesson(lessonNumber) : null;
+      if (video && video.videoId) {
+        button.dataset.videoId = video.videoId;
+        button.addEventListener('click', function () { loadLessonVideo(button); });
+      } else {
+        button.textContent = 'Video link needed';
+        button.classList.add('missing-video-link');
+        button.addEventListener('click', function () { loadLessonVideo(button); });
+      }
+    });
+  </script>
 </body>
 
 </html>
