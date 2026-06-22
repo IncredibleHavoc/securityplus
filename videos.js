@@ -5,7 +5,7 @@
 var professorMesserVideos = [
   {
     "playlistPosition": 1,
-    "lessonNumber": null,
+    "lessonNumber": 0,
     "objectiveCode": "intro",
     "objective": "Course Introduction",
     "title": "How to Pass Your SY0-701 Security+ Exam in 2026",
