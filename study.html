@@ -175,7 +175,7 @@
       const card = button.closest('.video-card');
       const staticVideoId = button.dataset.videoId;
       let video = null;
-      let lessonNumber = button.dataset.index;
+      let lessonNumber = Number(button.dataset.index);
       if (staticVideoId) {
         video = {
           videoId: staticVideoId,
